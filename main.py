@@ -8,7 +8,7 @@ import requests
 
 
 # Set Page Configurations
-st.set_page_config(page_title="Data Sweeper", layout="wide")
+st.set_page_config(page_title="Data Sweeper", layout="centered")  # Changed layout to centered for better mobile responsiveness
 
 # Custom Tailwind-Inspired Styling with Purple-Gray Theme
 # Add this updated CSS section
@@ -38,19 +38,20 @@ st.markdown(
         backdrop-filter: blur(20px);
         border-radius: 20px;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        margin: 2rem;
+        margin: 1rem;  /* Reduced margin for mobile */
         border: 1px solid rgba(255, 255, 255, 0.3);
     }
 
-    /* Cyberpunk-style Buttons */
+    /* Responsive Button Styles */
     .stButton>button, .stDownloadButton>button {
         border-radius: 12px;
-        padding: 1rem 2rem;
+        padding: 0.8rem 1.5rem;  /* Adjusted padding for mobile */
         font-weight: 600;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         overflow: hidden;
         border: none;
+        width: 100%;  /* Full width for mobile */
     }
 
     .stButton>button {
@@ -64,26 +65,6 @@ st.markdown(
         box-shadow: 0 6px 12px rgba(79, 70, 229, 0.3);
     }
 
-    .stButton>button::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(
-            120deg,
-            transparent,
-            rgba(255, 255, 255, 0.3),
-            transparent
-        );
-        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .stButton>button:hover::after {
-        left: 100%;
-    }
-
     /* Holographic Upload Section */
     .stFileUploader {
         border: 2px dashed rgba(79, 70, 229, 0.4) !important;
@@ -91,11 +72,7 @@ st.markdown(
         background: rgba(255, 255, 255, 0.1) !important;
         backdrop-filter: blur(5px);
         transition: all 0.3s ease;
-    }
-
-    .stFileUploader:hover {
-        border-color: #4f46e5 !important;
-        box-shadow: 0 0 15px rgba(79, 70, 229, 0.2);
+        width: 100%;  /* Full width for mobile */
     }
 
     /* Neon Headings */
@@ -103,18 +80,7 @@ st.markdown(
         color: #1e1b4b !important;
         text-shadow: 0 2px 4px rgba(79, 70, 229, 0.1);
         position: relative;
-    }
-
-    h1::after {
-        content: '';
-        position: absolute;
-        bottom: -8px;
-        # left: 50%;
-        # transform: translateX(-50%);
-        # width: 60px;
-        # height: 3px;
-        background: linear-gradient(90deg, #4f46e5, #9333ea);
-        border-radius: 2px;
+        text-align: center;  /* Centered headings for mobile */
     }
 
     /* Glowing Cards */
@@ -124,11 +90,7 @@ st.markdown(
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
         transition: all 0.3s ease;
         background: white !important;
-    }
-
-    .stDataFrame:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 15px rgba(79, 70, 229, 0.2) !important;
+        width: 100%;  /* Full width for mobile */
     }
 
     /* Custom Checkbox */
@@ -137,11 +99,8 @@ st.markdown(
         border-radius: 8px;
         transition: all 0.3s ease;
         border: 1px solid rgba(79, 70, 229, 0.2);
-    }
-
-    .stCheckbox input:checked + label {
-        background: rgba(79, 70, 229, 0.1) !important;
-        border-color: #4f46e5 !important;
+        display: block;  /* Block display for better mobile layout */
+        text-align: center;  /* Centered text for mobile */
     }
 
     /* Floating Animation for Lottie */
@@ -154,6 +113,7 @@ st.markdown(
     .lottie-animation {
         animation: float 4s ease-in-out infinite;
         filter: drop-shadow(0 10px 8px rgba(79, 70, 229, 0.1));
+        max-width: 100%;  /* Responsive width for animations */
     }
 
     /* Custom Scrollbar */
@@ -168,6 +128,20 @@ st.markdown(
     ::-webkit-scrollbar-thumb {
         background: linear-gradient(45deg, #4f46e5, #9333ea);
         border-radius: 4px;
+    }
+
+    /* Responsive Layout for Mobile */
+    @media (max-width: 600px) {
+        .stApp {
+            margin: 0.5rem;  /* Smaller margin for mobile */
+        }
+        .stButton>button, .stDownloadButton>button {
+            padding: 0.6rem 1rem;  /* Smaller padding for mobile */
+        }
+        .lottie-animation {
+            width: 100%;  /* Full width for mobile */
+            height: auto;  /* Maintain aspect ratio */
+        }
     }
     </style>
     """,
@@ -193,7 +167,7 @@ lottie_visual = load_lottie_url("https://assets3.lottiefiles.com/packages/lf20_2
 # Display Upload Animation with Slower Speed
 if lottie_upload:
     st.markdown('<div class="lottie-animation">', unsafe_allow_html=True)
-    st_lottie(lottie_upload, speed=0.6, width=500, height=300, key="upload_anim")
+    st_lottie(lottie_upload, speed=0.6, width=300, height=200, key="upload_anim")  # Adjusted width for mobile
     st.markdown('</div>', unsafe_allow_html=True)
 
 uploaded_files = st.file_uploader("📂 Upload a CSV or Excel file", type=["csv", "xlsx"], accept_multiple_files=True)
@@ -224,14 +198,15 @@ if uploaded_files:
 
         st.subheader("🛠 Data Cleaning Options")
         if st.checkbox(f"✨ Clean Data for {file.name}"):
-            col1, col2, col3 = st.columns(3)
+            col1, col2, col3 = st.columns(3)  # Creates three columns
 
             with col1:
+                st.markdown('<div style="display: flex; flex-direction: column; align-items: center;">', unsafe_allow_html=True)
+
                 if st.button(f"🗑 Remove Duplicates from {file.name}"):
                     df.drop_duplicates(inplace=True)
                     st.success("✅ Duplicates removed!")
 
-            with col2:
                 if st.button(f"📊 Fill Missing Values for {file.name}"):
                     numeric_cols = df.select_dtypes(include=['number']).columns
                     if not numeric_cols.empty:
@@ -240,18 +215,19 @@ if uploaded_files:
                     else:
                         st.warning("⚠ No numeric columns found!")
 
-            with col3:
                 if st.button(f"🧹 Remove Empty Rows from {file.name}"):
                     df.dropna(how='all', inplace=True)
                     st.success("✅ Empty rows removed!")
 
-            if st.button(f"📏 Normalize Numeric Data for {file.name}"):
-                numeric_cols = df.select_dtypes(include=['number']).columns
-                if not numeric_cols.empty:
-                    df[numeric_cols] = (df[numeric_cols] - df[numeric_cols].min()) / (df[numeric_cols].max() - df[numeric_cols].min())
-                    st.success("✅ Numeric data normalized!")
-                else:
-                    st.warning("⚠ No numeric columns found!")
+                if st.button(f"📏 Normalize Numeric Data for {file.name}"):
+                    numeric_cols = df.select_dtypes(include=['number']).columns
+                    if not numeric_cols.empty:
+                        df[numeric_cols] = (df[numeric_cols] - df[numeric_cols].min()) / (df[numeric_cols].max() - df[numeric_cols].min())
+                        st.success("✅ Numeric data normalized!")
+                    else:
+                        st.warning("⚠ No numeric columns found!")
+
+                st.markdown('</div>', unsafe_allow_html=True)
 
         st.subheader("📊 Data Visualization")
         if st.checkbox(f"📈 Show Visualization for {file.name}"):
